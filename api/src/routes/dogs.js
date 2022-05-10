@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { Router } = require("express");
 const { Breed, Temperament } = require("../models/Dog");
 const { Op } = require("sequelize");

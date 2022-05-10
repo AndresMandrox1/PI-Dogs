@@ -1,28 +1,36 @@
-//                       _oo0oo_
-//                      o8888888o
-//                      88" . "88
-//                      (| -_- |)
-//                      0\  =  /0
-//                    ___/`---'\___
-//                  .' \\|     |// '.
-//                 / \\|||  :  |||// \
-//                / _||||| -:- |||||- \
-//               |   | \\\  -  /// |   |
-//               | \_|  ''\---/''  |_/ |
-//               \  .-\__  '-'  ___/-. /
-//             ___'. .'  /--.--\  `. .'___
-//          ."" '<  `.___\_<|>_/___.' >' "".
-//         | | :  `- \`.;`\ _ /`;.`/ - ` : | |
-//         \  \ `_.   \_ __\ /__ _/   .-` /  /
-//     =====`-.____`.___ \_____/___.-`___.-'=====
-//                       `=---='
-//     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const server = require('./src/app.js');
-const { conn } = require('./src/db.js');
+const server = require("./src/app.js");
+var { db, Breed, Temperament } = require("./src/models/Dog");
+const axios = require("axios");
 
-// Syncing all the models at once.
-conn.sync({ force: true }).then(() => {
+let obj = {};
+db.sync({ force: true }).then(() => {
+  axios.get("https://api.thedogapi.com/v1/breeds").then((res) => {
+    res.data?.forEach((e) => {
+      let tempers = e.temperament?.split(", ");
+      tempers?.forEach((t) => {
+        Temperament.findOrCreate({ where: { name: t } }).then((t) => {
+          if (!obj.hasOwnProperty(e.id)) {
+            obj[e.id] = [];
+          }
+          obj[e.id].push(t[0].id);
+        });
+      });
+    });
+
+    res.data.map((e) =>
+      Breed.create({
+        name: e.name,
+        height: e.height.metric,
+        weight: e.weight.metric,
+        life_span: e.life_span,
+        image: e.image.url,
+        apiId: e.id,
+      }).then((breeds) => {
+        breeds.addTemperament(obj[breeds.dataValues.apiId]);
+      })
+    );
+  });
   server.listen(3001, () => {
-    console.log('%s listening at 3001'); // eslint-disable-line no-console
+    console.log("Server is listening at 3001 port");
   });
 });

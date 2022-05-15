@@ -1,10 +1,21 @@
-import './App.css';
-
+import React from "react";
+import { Route, Switch } from "react-router-dom";
+import LandingPage from "./components/LandingPage/LandingPage";
+import NavBar from "./components/NavBar/NavBar";
+import Detail from './components/Detail/Detail'
+import Home from './components/Home/Home'
 function App() {
   return (
-    <div className="App">
-      <h1>Henry Dogs</h1>
-    </div>
+    <React.Fragment>
+      <Switch>
+        <Route exact path="/" component={LandingPage} />
+        <Route path="/">
+          <NavBar />
+          <Route path='/home' component={Home}/>
+          <Route path= '/breed/:id' component={Detail}/>
+        </Route>
+      </Switch>
+    </React.Fragment>
   );
 }
 

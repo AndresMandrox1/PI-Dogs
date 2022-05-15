@@ -1,0 +1,31 @@
+.card {
+  border: 1px solid black;
+}
+
+.container {
+  background-color: rgba(128, 128, 128, 0.191);
+  width: 400px;
+  height: 350px;
+  border: 2px solid black;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  margin: 0;
+  justify-content: center;
+}
+
+h4 {
+  margin: 0%;
+}
+
+p {
+  margin: 5px;
+}
+
+.img {
+ max-width: 350px;
+ max-height: 250px;
+}

@@ -11,7 +11,7 @@ export const FILTER_BY_ORIGIN = "FILTER_BY_ORIGIN";
 export function getBreeds() {
   return function (dispatch) {
     return axios
-      .get("http://localhost:3001/dogs")
+      .get("/dogs")
       .then((response) => response.data)
       .then((json) => {
         dispatch({ type: GET_BREEDS, payload: json });
@@ -22,7 +22,7 @@ export function getBreeds() {
 export function getBreedDetail(id) {
   return function (dispatch) {
     return axios
-      .get("http://localhost:3001/dogs/" + id)
+      .get("/dogs/" + id)
       .then((response) => response.data)
       .then((json) => {
         dispatch({ type: GET_BREED_DETAIL, payload: json[0] });
@@ -33,7 +33,7 @@ export function getBreedDetail(id) {
 export function searchBreed(name) {
   return function (dispatch) {
     return axios
-      .get(`http://localhost:3001/dogs/?name=${name}`)
+      .get(`/dogs/?name=${name}`)
       .then((res) => res.data)
       .then((json) => {
         dispatch({ type: SEARCH_BREED, payload: json });

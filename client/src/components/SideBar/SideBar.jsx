@@ -20,7 +20,7 @@ function SideBar() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/temperaments")
+      .get("/temperaments")
       .then((r) => r.data)
       .then((e) => setTemperaments(e));
   }, []);

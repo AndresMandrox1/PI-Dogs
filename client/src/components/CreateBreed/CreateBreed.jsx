@@ -19,7 +19,7 @@ function CreateBreed() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/temperaments")
+      .get("/temperaments")
       .then((r) => r.data)
       .then((e) => setTemperaments(e));
   }, []);
@@ -57,7 +57,7 @@ function CreateBreed() {
               alert("it is necessary to add at least one temperament");
               return;
             }
-            axios.post("http://localhost:3001/dog", {
+            axios.post("/dog", {
               name: Breed.name,
               height: `${Breed.min_height} - ${Breed.max_height}`,
               weight: `${Breed.min_weight} - ${Breed.max_weight}`,

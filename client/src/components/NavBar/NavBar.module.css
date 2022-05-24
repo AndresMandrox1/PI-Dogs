@@ -3,17 +3,17 @@
 .container {
   display: flex;
   justify-content: space-evenly;
-  background-color: rgba(76, 98, 105, 0.4);
+  background-color: #00909E;
   padding: 15px;
 }
 
 a {
   text-decoration: none;
-  color: black;
+  color: #22577A;
   font-size: 20px;
   font-family: "Koulen", cursive;
 }
 
 a:hover {
-  color: rgba(45, 45, 204, 0.917);
+  color: black;
 }

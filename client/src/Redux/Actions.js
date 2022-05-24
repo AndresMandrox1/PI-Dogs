@@ -1,12 +1,12 @@
 import axios from "axios";
 export const GET_BREEDS = "GET_BREEDS";
-// export const GET_BREED_DETAIL = "GET_BREED_DETAIL";
-// export const CREATE_BREED = "CREATE_BREED";
-// export const SET_FILTERED = "SET_FILTERED";
-// export const SET_LOADING = "SET_LOADING";
-// export const ORDER_ASC = "ORDER_ASC";
-// export const ORDER_DESC = "ORDER_DESC";
-// export const SET_BREEDS = "SET_BREEDS";
+export const GET_BREED_DETAIL = "GET_BREED_DETAIL";
+export const CREATE_BREED = "CREATE_BREED";
+export const SEARCH_BREED = "SEARCH_BREED";
+export const TEMPERAMENT_FILTER = "TEMPERAMENT_FILTER";
+export const FILTER_BY_NAME = "FILTER_BY";
+export const FILTER_BY_WEIGHT = "FILTER_BY_WEIGHT";
+export const FILTER_BY_ORIGIN = "FILTER_BY_ORIGIN";
 
 export function getBreeds() {
   return function (dispatch) {
@@ -19,32 +19,40 @@ export function getBreeds() {
   };
 }
 
-// export function getBreedDetail(id) {
-//   return function (dispatch) {
-//     return axios
-//       .get("/dogs/" + id)
-//       .then((response) => response.data)
-//       .then((json) => {
-//         dispatch({ type: GET_BREED_DETAIL, payload: json });
-//       });
-//   };
-// }
+export function getBreedDetail(id) {
+  return function (dispatch) {
+    return axios
+      .get("http://localhost:3001/dogs/" + id)
+      .then((response) => response.data)
+      .then((json) => {
+        dispatch({ type: GET_BREED_DETAIL, payload: json[0] });
+      });
+  };
+}
 
-// export function setFiltered(payload) {
-//   return { type: SET_FILTERED, payload };
-// }
+export function searchBreed(name) {
+  return function (dispatch) {
+    return axios
+      .get(`http://localhost:3001/dogs/?name=${name}`)
+      .then((res) => res.data)
+      .then((json) => {
+        dispatch({ type: SEARCH_BREED, payload: json });
+      });
+  };
+}
 
-// export function setLoading(payload) {
-//   return { type: SET_LOADING, payload };
-// }
+export function temperamentFilter(temperament) {
+  return { type: TEMPERAMENT_FILTER, payload: temperament };
+}
 
-// export function ordenar(order, category) {
-//   return { type: order === "asc" ? ORDER_ASC : ORDER_DESC, payload: category };
-// }
+export function filterByName() {
+  return { type: FILTER_BY_NAME };
+}
 
-// export function setBreeds(payload) {
-//   return {
-//     type: SET_BREEDS,
-//     payload,
-//   };
-// }
+export function filterByWeight() {
+  return { type: FILTER_BY_WEIGHT };
+}
+
+export function filterByOrigin(from) {
+  return { type: FILTER_BY_ORIGIN , payload : from};
+}

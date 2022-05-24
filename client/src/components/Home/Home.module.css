@@ -1,8 +1,10 @@
 .container {
   display: grid;
+  max-width: 100%;
   grid-template-columns: 1fr 4fr;
 }
-.cards{
+
+.cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-items: center;
@@ -10,7 +12,28 @@
   margin-top: 20px;
 }
 
-.pagi{
+.pagi {
   text-align: center;
   padding: 20px;
+  max-width: 100%;
 }
+
+.back {
+  margin-bottom: 20px;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  border: 1px solid rgb(111, 6, 6);
+  width: 50px;
+  height: 30px;
+}
+
+.back:hover {
+  background-color: rgba(255, 0, 0, 0.39);
+}
+
+.right {
+  text-align: center;
+  max-width: 100%;
+}
+

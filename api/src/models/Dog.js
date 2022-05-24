@@ -30,10 +30,6 @@ const Breed = db.define(
     image: {
       type: DataTypes.STRING,
     },
-
-    apiId: {
-      type: DataTypes.INTEGER,
-    },
   },
   { timestamps: false }
 );

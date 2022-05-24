@@ -1,11 +1,11 @@
 import {
   GET_BREEDS,
-  // GET_BREED_DETAIL,
-  // SET_FILTERED,
-  // SET_LOADING,
-  // ORDER_ASC,
-  // ORDER_DESC,
-  // SET_BREEDS,
+  GET_BREED_DETAIL,
+  SEARCH_BREED,
+  TEMPERAMENT_FILTER,
+  FILTER_BY_NAME,
+  FILTER_BY_WEIGHT,
+  FILTER_BY_ORIGIN,
 } from "./Actions";
 
 const initialState = {
@@ -14,127 +14,103 @@ const initialState = {
   breedDetail: {},
 };
 
+const orderName = (bre) => {
+  return bre.sort((b1, b2) => {
+    if (b1.name?.toUpperCase() < b2.name?.toUpperCase()) {
+      return -1;
+    } else if (b1.name?.toUpperCase() > b2.name?.toUpperCase()) {
+      return 1;
+    }
+    return 0;
+  });
+};
+
+const orderWeight = (bre) => {
+  return bre.sort((b1, b2) => {
+    return parseInt(b1.weight?.slice(-2)) - parseInt(b2.weight?.slice(-2));
+  });
+};
+
+const orderOrigin = (bre, from) => {
+  if (from === "api") return bre.filter((e) => e.id < 300);
+  if (from === "bd") return bre.filter((e) => e.id >= 300);
+  else return bre;
+};
+
 function rootReducer(state = initialState, action) {
   if (action.type === GET_BREEDS) {
+    if (!state.breeds.length) {
+      if (!state.filteredBreeds.length) {
+        return {
+          ...state,
+          breeds: action.payload,
+          filteredBreeds: action.payload,
+        };
+      }
+      return {
+        ...state,
+        breeds: action.payload,
+      };
+    }
+  }
+  if (action.type === GET_BREED_DETAIL) {
     return {
       ...state,
-      breeds: action.payload,
+      breedDetail: action.payload,
     };
   }
-  // if (action.type === GET_BREED_DETAIL) {
-  //   return {
-  //     ...state,
-  //     breedDetail: action.payload,
-  //   };
-  // }
 
-  // if (action.type === SET_FILTERED) {
-  //   return {
-  //     ...state,
-  //     filteredBreeds: action.payload,
-  //   };
-  // }
-  // if (action.type === SET_LOADING) {
-  //   return {
-  //     ...state,
-  //     loading: action.payload,
-  //   };
-  // }
-  // if (action.type === ORDER_ASC) {
-  //   if (action.payload === "name") {
-  //     return {
-  //       ...state,
-  //       filteredBreeds: [...state.filteredBreeds].sort((a, b) =>
-  //         a[action.payload].toLowerCase() > b[action.payload].toLowerCase()
-  //           ? 1
-  //           : -1
-  //       ),
-  //       breedsLoaded: [...state.breedsLoaded].sort((a, b) =>
-  //         a[action.payload].toLowerCase() > b[action.payload].toLowerCase()
-  //           ? 1
-  //           : -1
-  //       ),
-  //     };
-  //   } else {
-  //     return {
-  //       ...state,
-  //       filteredBreeds: [...state.filteredBreeds].sort((a, b) => {
-  //         const arrayA = a[action.payload].split(" - "); // ["2", "4"]
-  //         const arrayB = b[action.payload].split(" - "); // ["2", "4"]
+  if (action.type === SEARCH_BREED) {
+    let search = [];
+    state.breeds.forEach((e) => {
+      if (action.payload.includes(e.name)) {
+        search.push(e);
+      }
+    });
+    if (!search.length) search = state.breeds;
+    return {
+      ...state,
+      filteredBreeds: search,
+    };
+  }
 
-  //         const promA = (+arrayA[0] + +arrayA[1] ? +arrayA[1] : 0) / 2; // 5
-  //         const promB = (+arrayB[0] + +arrayB[1] ? +arrayB[1] : 0) / 2; // 10
+  if (action.type === TEMPERAMENT_FILTER) {
+    let n = [];
+    for (let i = 0; i < state.breeds?.length; i++) {
+      let a = state.breeds[i].temperaments.filter(
+        (e) => e.name === action.payload
+      );
+      if (a.length) {
+        n.push(state.breeds[i]);
+      }
+    }
+    return {
+      ...state,
+      filteredBreeds: n,
+    };
+  }
 
-  //         return promA > promB ? 1 : -1;
-  //       }),
-  //       breedsLoaded: [...state.breedsLoaded].sort((a, b) => {
-  //         const arrayA = a[action.payload].split(" - "); // ["2", "4"]
-  //         const arrayB = b[action.payload].split(" - "); // ["2", "4"]
+  if (action.type === FILTER_BY_NAME) {
+    return {
+      ...state,
+      filteredBreeds: orderName(state.filteredBreeds).concat(""),
+    };
+  }
 
-  //         const promA = (+arrayA[0] + +arrayA[1] ? +arrayA[1] : 0) / 2; // 5
-  //         const promB = (+arrayB[0] + +arrayB[1] ? +arrayB[1] : 0) / 2; // 10
+  if (action.type === FILTER_BY_WEIGHT) {
+    return {
+      ...state,
+      filteredBreeds: orderWeight(state.filteredBreeds).concat(""),
+    };
+  }
 
-  //         return promA > promB ? 1 : -1;
-  //       }),
-  //     };
-  //   }
-  // }
-  // if (action.type === ORDER_DESC) {
-  //   if (action.payload === "name") {
-  //     return {
-  //       ...state,
-  //       filteredBreeds: [...state.filteredBreeds].sort((a, b) =>
-  //         a[action.payload].toLowerCase() < b[action.payload].toLowerCase()
-  //           ? 1
-  //           : -1
-  //       ),
-  //       breedsLoaded: [...state.breedsLoaded].sort((a, b) =>
-  //         a[action.payload].toLowerCase() < b[action.payload].toLowerCase()
-  //           ? 1
-  //           : -1
-  //       ),
-  //     };
-  //   } else {
-  //     return {
-  //       ...state,
-  //       filteredBreeds: [...state.filteredBreeds].sort((a, b) => {
-  //         const arrayA = a[action.payload].split(" - "); // ["2", "4"]
-  //         const arrayB = b[action.payload].split(" - "); // ["2", "4"]
+  if (action.type === FILTER_BY_ORIGIN) {
+    return {
+      ...state,
+      filteredBreeds: orderOrigin(state.breeds, action.payload).concat(""),
+    };
+  }
 
-  //         const promA = (+arrayA[0] + +arrayA[1] ? +arrayA[1] : 0) / 2; // 5
-  //         const promB = (+arrayB[0] + +arrayB[1] ? +arrayB[1] : 0) / 2; // 10
-
-  //         return promA > promB ? -1 : 1;
-  //       }),
-  //       breedsLoaded: [...state.breedsLoaded].sort((a, b) => {
-  //         const arrayA = a[action.payload].split(" - "); // ["2", "4"]
-  //         const arrayB = b[action.payload].split(" - "); // ["2", "4"]
-
-  //         const promA = (+arrayA[0] + +arrayA[1] ? +arrayA[1] : 0) / 2; // 5
-  //         const promB = (+arrayB[0] + +arrayB[1] ? +arrayB[1] : 0) / 2; // 10
-
-  //         return promA > promB ? -1 : 1;
-  //       }),
-  //     };
-  //   }
-  // }
-  // if (action.type === SET_BREEDS) {
-  //   let filter = state.filteredBreeds;
-  //   let breeds = state.breedsLoaded;
-
-  //   if (action.payload === "creada") {
-  //     filter = filter.length > 0 ? filter.filter((b) => b.id >= 265) : [];
-  //     breeds = breeds.length > 0 ? breeds.filter((b) => b.id >= 265) : [];
-  //   } else if (action.payload === "API") {
-  //     filter = filter.length > 0 ? filter.filter((b) => b.id < 265) : [];
-  //     breeds = breeds.length > 0 ? breeds.filter((b) => b.id < 265) : [];
-  //   }
-  //   return {
-  //     ...state,
-  //     breedsLoaded: breeds,
-  //     filteredBreeds: filter,
-  //   };
-  // }
   return state;
 }
 export default rootReducer;

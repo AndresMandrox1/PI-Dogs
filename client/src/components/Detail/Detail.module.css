@@ -1,0 +1,25 @@
+.box {
+  display: flex;
+  justify-content: space-around;
+  background-color: #bce5d3;
+  color:#27496D ;
+  width: 100%;
+}
+.title{
+  color:#142850;
+}
+
+.container {
+  width: 60%;
+  margin: 10px;
+  padding: 10px;
+  text-align: center;
+  border: 2px solid #38A3A5;
+  border-radius: 10px   ;
+}
+
+.img{
+  margin-top: 20px;
+  width: 70%;
+  max-height: 65%;
+}

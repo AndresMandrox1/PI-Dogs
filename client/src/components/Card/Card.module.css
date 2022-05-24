@@ -4,7 +4,7 @@
 
 .container {
   background-color: rgba(128, 128, 128, 0.191);
-  width: 400px;
+  width: 90%;
   height: 350px;
   border: 2px solid black;
   text-align: center;
@@ -26,6 +26,6 @@ p {
 }
 
 .img {
- max-width: 350px;
- max-height: 250px;
+ width: 75%;
+ max-height: 60%;
 }
